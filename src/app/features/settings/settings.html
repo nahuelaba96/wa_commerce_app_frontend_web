@@ -1,0 +1,21 @@
+<div class="page-header">
+	<h1>Configuración</h1>
+	<p>Configurá el comercio que utiliza la aplicación.</p>
+</div>
+
+<mat-card>
+	<form [formGroup]="merchantForm" (ngSubmit)="saveMerchant()">
+		<mat-form-field appearance="outline">
+			<mat-label>ID del comercio</mat-label>
+			<input matInput type="number" min="1" formControlName="merchantId">
+			@if (merchantForm.controls.merchantId.hasError('required')) {
+				<mat-error>El ID del comercio es obligatorio</mat-error>
+			}
+			@if (merchantForm.controls.merchantId.hasError('min')) {
+				<mat-error>El ID debe ser mayor que cero</mat-error>
+			}
+		</mat-form-field>
+
+		<button mat-flat-button color="primary" type="submit">Guardar comercio</button>
+	</form>
+</mat-card>

@@ -1,59 +1,42 @@
-# WhatsappAiFrontend
+# WhatsApp IA Commerce — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.0.
+Aplicación web de WhatsApp IA Commerce, desarrollada con Angular 22.2, Angular Material y TypeScript. Incluye pantallas de inicio de sesión y registro, dashboard, productos, conversaciones y configuración.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js compatible con Angular CLI 22.
+- npm (el proyecto declara `npm@11.17.0` como package manager).
+- Microservicios de autenticación y backend disponibles para probar los flujos completos.
 
-```bash
-ng serve
+## Instalación y desarrollo local
+
+Desde la raíz de `whatsapp-ai-frontend/`:
+
+```sh
+npm ci
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+La aplicación de desarrollo queda disponible en `http://localhost:4200/` y recarga automáticamente los cambios.
 
-## Code scaffolding
+## Servicios API
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Las URLs base de desarrollo están definidas en `src/app/core/config/api.config.ts`:
 
-```bash
-ng generate component component-name
+- Backend: `http://localhost:8080/api`
+- Autenticación: `http://localhost:8081/api/auth`
+
+Para otros entornos, ajustar la configuración de API del frontend y coordinar los orígenes permitidos con `BACKEND_CORS_ALLOWED_ORIGINS` y `AUTH_ALLOWED_ORIGINS` en los servicios correspondientes.
+
+La autenticación utiliza access tokens Bearer para las solicitudes al backend y cookies de refresh enviadas con credenciales al servicio de autenticación. El servicio de autenticación debe estar configurado para aceptar el origen explícito del frontend.
+
+## Build y pruebas
+
+```sh
+npm run build
+npm test
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Los scripts `build` y `test` del `package.json` ejecutan esos comandos. Las pruebas unitarias usan el runner configurado por Angular (`Vitest`).
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+No hay un script ni una configuración e2e definida actualmente en `package.json` y `angular.json`; no ejecutar `ng e2e` hasta que se incorpore un framework de pruebas end-to-end.

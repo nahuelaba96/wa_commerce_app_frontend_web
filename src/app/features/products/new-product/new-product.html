@@ -1,0 +1,165 @@
+<div class="page-header">
+  <div>
+    <h1>{{ isEditMode ? 'Editar producto' : 'Nuevo producto' }}</h1>
+    <p>
+      {{
+        isEditMode ? 'Actualizá la información del producto.' : 'Agregá un producto al catálogo.'
+      }}
+    </p>
+  </div>
+</div>
+
+<mat-card>
+  <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+
+        <input matInput formControlName="name" placeholder="Ej. Aceite Castrol 5W30" />
+
+        @if (productForm.controls.name.hasError('required')) {
+          <mat-error> El nombre es obligatorio </mat-error>
+        }
+
+        @if (productForm.controls.name.hasError('minlength')) {
+          <mat-error> El nombre debe tener al menos 2 caracteres </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Categoría</mat-label>
+
+        <mat-select
+          formControlName="category"
+          (selectionChange)="onCategorySelectionChange($event.value)"
+        >
+          @for (category of categories; track category.id) {
+            <mat-option [value]="category.id.toString()">{{ category.name }}</mat-option>
+          }
+          <mat-option [value]="createCategoryOption">Crear categoría…</mat-option>
+        </mat-select>
+
+        @if (categoryError) {
+          <mat-error>{{ categoryError }}</mat-error>
+        }
+
+        @if (productForm.controls.category.hasError('required')) {
+          <mat-error> La categoría es obligatoria </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Marca</mat-label>
+
+        <input matInput formControlName="brand" placeholder="Ej. Castrol" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descripción</mat-label>
+
+      <textarea
+        matInput
+        formControlName="description"
+        rows="4"
+        placeholder="Descripción del producto"
+      ></textarea>
+    </mat-form-field>
+
+    <section class="variants-section" formArrayName="variants">
+      <div class="variants-header">
+        <div>
+          <h2>Variaciones</h2>
+          <p>Agregá las presentaciones o versiones de este producto.</p>
+        </div>
+
+        <button
+          mat-icon-button
+          color="primary"
+          type="button"
+          aria-label="Agregar variación"
+          (click)="addVariant()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="variants-table-wrapper">
+        <table class="variants-table">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Talle</th>
+              <th>Color</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th class="actions-column">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (variant of variants.controls; track variant; let index = $index) {
+              <tr [formGroupName]="index">
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="sku" placeholder="Ej. ACE-5W30-1L" />
+                    @if (
+                      variant.controls.sku.hasError('required') && variant.controls.sku.touched
+                    ) {
+                      <mat-error>Requerido</mat-error>
+                    }
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="size" placeholder="Ej. 1L" />
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput formControlName="color" placeholder="Ej. Negro" />
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <span matTextPrefix>$&nbsp;</span>
+                    <input matInput type="number" formControlName="price" min="0" />
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline">
+                    <input matInput type="number" formControlName="stock" min="0" />
+                  </mat-form-field>
+                </td>
+                <td class="actions-column">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    aria-label="Eliminar variación"
+                    (click)="removeVariant(index)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    @if (productError) {
+      <p class="form-error" role="alert">{{ productError }}</p>
+    }
+
+    <div class="actions">
+      <button mat-button type="button" (click)="cancel()">Cancelar</button>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="saving">
+        {{ saving ? 'Guardando…' : isEditMode ? 'Guardar cambios' : 'Crear producto' }}
+      </button>
+    </div>
+  </form>
+</mat-card>

@@ -1,0 +1,20 @@
+<mat-toolbar>
+  @if (merchantName()) {
+    <span>{{ merchantName() }}</span>
+  } @else if (merchantLoadError()) {
+    <span role="alert">No se pudo cargar el nombre del comercio</span>
+  } @else {
+    <span>Cargando comercio…</span>
+  }
+
+  <span class="spacer"></span>
+
+  <button mat-icon-button>
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <button mat-button (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Cerrar sesión
+  </button>
+</mat-toolbar>
